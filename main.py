@@ -2,14 +2,15 @@ import argparse
 import time 
 import copy
 import csv
+import os
 
-from rectangle_mod import generate_rectangles
+from rectangle_mod import generate_rectangles, draw_rectangles
 
 def brute_algorithm(rectangles):
     rectangles.sort()    
     for i in range(len(rectangles)):
         for j in range(i + 1, len(rectangles)):
-            if rectangles[i].right_x() == rectangles[j].x:
+            if rectangles[i] == rectangles[j]:
                 rectangles[i].add_adj(rectangles[j])
 
 def main():
@@ -23,7 +24,18 @@ def main():
     print('Maximum number of rectangles:', args.data_size)
     print('Sampling rate per n:', args.sampling_rate)
 
-    bf_csv = open(f"{args.data_name}_bf_results.csv", "w", newline='')
+    # Printing Adjacencies and Picture for verification
+    # =================================================
+    # board_size = [max(20, args.data_size * 2), max(20, args.data_size * 2)]
+    # rectangles = generate_rectangles(board_size, args.data_size)
+    # draw_rectangles(args.data_name, rectangles, board_size)
+    # brute_algorithm(rectangles)
+    # for rect in rectangles:
+    #     print(rect.adj_to_csv_string())
+
+    # Algorithm complexity testing
+    # ============================
+    bf_csv = open("brute_force.csv", "w", newline='')
     # o_csv = open(f"{args.data_name}_o_results.csv", "w", newline='')
 
     bf_writer = csv.writer(bf_csv)
@@ -59,6 +71,11 @@ def main():
         # o_writer.writerow([n + 1, o_ave])
 
     print()
+
+    bf_csv.close()
+    # o_csv.close()
+
+    os.system(f'python3 graph_generator.py 1 brute_force.csv "AAA Assignment {args.data_name}"')
 
 if __name__ == "__main__":
     main()
