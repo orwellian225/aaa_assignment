@@ -1,4 +1,3 @@
-import numpy as np
 import math as m
 import random
 import matplotlib.patches as patches
@@ -11,23 +10,52 @@ class Rectangle:
         self.y = y
         self.w = w
         self.h = h
+        self.adj_rects = []
 
-    def print_rectangle(self, show_dimensions=False):
+    def __str__(self) -> str:
+        return f"{self.id} x: {self.x} y: {self.y} w: {self.w} h: {self.h}"
+
+    def __eq__(self, other):
+        return self.x == other.x
+
+    def __lt__(self, other):
+        return self.x < other.x
+
+    def add_adj(self, adj_rect):
+        self.adj_rects.append(adj_rect)
+
+    def adj_to_csv_string(self):
+        result = f"{self.id},{len(self.adj_rects)},"
+
+        for rect in self.adj_rects:
+            result += f"{rect.id},{rect.x},{rect.y},{rect.top_y()},"
+
+        return result
+
+    def to_string(self, show_dimensions=False):
         if show_dimensions:
-            print(self.id, "x:", self.x, "y:", self.y, "w:", self.w, "h:", self.h)
+            return f"{self.id} x: {self.x} y: {self.y} w: {self.w} h: {self.h}"
         else:
-            print(self.id, "left x:", self.x, "bottom y:", self.y, "right x:", self.x + self.w, "top y:", self.y + self.h)
+            return f"{self.id} left x: {self.x} bottom y: {self.y} right x: {self.right_x()} top y: {self.top_y()}"
 
     def as_array(self, show_dimensions=False):
         if show_dimensions:
-            return np.array([self.id, self.x, self.y, self.w, self.h])
+            return [self.id, self.x, self.y, self.w, self.h]
         else:
-            return np.array([self.id, self.x, self.y, self.x + self.w, self.y + self.h])
+            return [self.id, self.x, self.y, self.x + self.w, self.y + self.h]
 
     def top_y(self):
         return self.y + self.h
     def right_x(self):
         return self.x + self.w
+
+def generate_rect(id, x, y_min, y_max, w_min, w_max, h_min, h_max):
+    x = x
+    y = random.randint(y_min, y_max)
+    w = random.randint(w_min, w_max)
+    h = random.randint(h_min, h_max)
+
+    return Rectangle(id, x, y, w, h)
 
 def has_overlap(rectangles, new_rect):
     for rect in rectangles:
@@ -56,39 +84,33 @@ def draw_rectangles(name, rectangles, board_size):
 
 def generate_rectangles(board_size, data_size):
 
+    w_min = 5
+    w_max = m.floor(board_size[0] / 2)
+    h_min = 5
+    h_max = m.floor(board_size[0] / 2)
+
     rectangles = []
 
-    x = 0
-    y = 0
-    w = random.randint(1, m.floor(board_size[0] / 2))
-    h = random.randint(1, m.floor(board_size[1] / 2))
-    rectangles.append(Rectangle(1, x, y, w, h))
+    rectangles.append(generate_rect(1, 0, 0, 0, w_min, w_max, h_min, h_max))
 
     excessive_overlap_flag = False
     for i in range(1, data_size):
-        print(f"\rrectangle {i + 1}/{data_size}", end = '')
+        # print(f"\rgenerating rectangle {i + 1}/{data_size}", end = '')
         rect_id = i + 1
 
         origin_rect_idx = random.randint(0, len(rectangles) - 1)
         origin_rect = rectangles[origin_rect_idx]
-
-        y_range = [origin_rect.y, origin_rect.top_y()]
-
-        x = origin_rect.x
-        y = random.randint(y_range[0], y_range[1])
-        w = random.randint(1, m.floor(board_size[0] / 2))
-        h = random.randint(1, m.floor(board_size[1] / 2))
-        new_rect = Rectangle(rect_id, x, y, w, h)
+        y_min = origin_rect.y
+        y_max = origin_rect.top_y() - 1;
+        new_rect = generate_rect(rect_id, origin_rect.right_x(), y_min, y_max, w_min, w_max, h_min, h_max)
 
         overlap_counter = 0
         while has_overlap(rectangles, new_rect):
             origin_rect_idx = random.randint(0, len(rectangles) - 1)
             origin_rect = rectangles[origin_rect_idx]
-            x = origin_rect.right_x()
-            y = random.randint(y_range[0], y_range[1])
-            w = random.randint(5, m.floor(board_size[0] / 2))
-            h = random.randint(5, m.floor(board_size[1] / 2))
-            new_rect = Rectangle(rect_id, x, y, w, h)
+            y_min = origin_rect.y
+            y_max = origin_rect.top_y() - 1
+            new_rect = generate_rect(rect_id, origin_rect.right_x(), y_min, y_max, w_min, w_max, h_min, h_max)
             
             overlap_counter += 1
             if overlap_counter == 100000:
@@ -99,6 +121,5 @@ def generate_rectangles(board_size, data_size):
             break
         rectangles.append(new_rect)
 
-    print()
     return rectangles
 
