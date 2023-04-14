@@ -44,3 +44,7 @@ std::string Rectangle::to_string_point() {
 std::string Rectangle::to_csv_point() {
     return Sprintf("%d,%d,%d,%d,%d", id, x, y, right_x(), top_y());
 }
+
+bool Rectangle::is_overlapping(Rectangle* other) {
+    return this->right_x() > other->left_x() and other->right_x() > this->left_x() and this->top_y() > other->bot_y() and other->top_y() > this->bot_y();
+}

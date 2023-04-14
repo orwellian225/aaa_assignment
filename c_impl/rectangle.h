@@ -25,4 +25,6 @@ class Rectangle {
         std::string to_csv_dimension();
         std::string to_string_point();
         std::string to_csv_point();
+
+        bool is_overlapping(Rectangle* other);
 };
