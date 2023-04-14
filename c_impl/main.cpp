@@ -4,6 +4,7 @@
 
 #include "rectangle.h"
 #include "adjacency.h"
+#include "alg.h"
 
 int main(int argc, char* argv[]) {
 
@@ -35,20 +36,10 @@ int main(int argc, char* argv[]) {
     printf("Sampling Rate: %d\n", test_sampling_rate);
     printf("============================================\n");
 
-    std::vector<Rectangle> rects;
-    rects.push_back(Rectangle(1, 0, 0, 5, 5));
-    rects.push_back(Rectangle(2, 5, 5, 5, 5));
-    rects.push_back(Rectangle(3, 10, 10, 5, 5));
-
+    std::vector<Rectangle> rects = generate::appending(test_size);
     for (auto rect: rects) {
         printf("%s\n", rect.to_string_point().c_str());
     }
-
-    Adjacency adj(&rects[0]);
-    adj.add_adj(&rects[1]);
-    adj.add_adj(&rects[2]);
-
-    printf("%s\n", adj.to_string().c_str());
 
     fclose(test_csv);
 }
