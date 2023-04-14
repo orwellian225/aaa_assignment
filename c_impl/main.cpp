@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "rectangle.h"
+#include "adjacency.h"
 
 int main(int argc, char* argv[]) {
 
@@ -42,6 +43,12 @@ int main(int argc, char* argv[]) {
     for (auto rect: rects) {
         printf("%s\n", rect.to_string_point().c_str());
     }
+
+    Adjacency adj(&rects[0]);
+    adj.add_adj(&rects[1]);
+    adj.add_adj(&rects[2]);
+
+    printf("%s\n", adj.to_string().c_str());
 
     fclose(test_csv);
 }

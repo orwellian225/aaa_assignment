@@ -21,6 +21,7 @@ Rectangle::Rectangle(int id, int x, int y, int w, int h) {
     this->h = h;
 }
 
+int Rectangle::rect_id() { return id; }
 int Rectangle::bot_y() { return y; }
 int Rectangle::top_y() { return y + h; }
 int Rectangle::left_x() { return x; }
