@@ -1,26 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 
-struct Rectangle {
-    int id;
-    int x;
-    int y;
-    int w;
-    int h;
-};
-int right_x(const struct Rectangle* rect) { return rect->x + rect->w; }
-int top_y(const struct Rectangle* rect) { return rect->y + rect->h; }
-void save_points(const struct Rectangle* rect, FILE* file) { fprintf(file, "%d,%d,%d,%d,%d\n", rect->id, rect->x, rect->y, rect->w, rect->h); }
-void print_points(const struct Rectangle* rect) { printf("rect_id: %d, lx: %d, by: %d, rx: %d, ty: %d\n", rect->id, rect->x, rect->y, right_x(rect), top_y(rect)); }
-void print_dimensions(const struct Rectangle* rect) { printf("rect_id: %d, x: %d, y: %d, w: %d, h: %d\n", rect->id, rect->x, rect->y, rect->w, rect->h); }
-
-struct Adjacencies {
-    const struct Rectangle* rect;
-    const struct Rectangle** adj_rects;
-};
-void print_adj(const struct Adjacencies* adj) { 
-    printf("%d,%ld", adj->rect->id, sizeof(adj->adj_rects));
-}
+#include "rectangle.h"
 
 int main(int argc, char* argv[]) {
 
@@ -50,27 +32,16 @@ int main(int argc, char* argv[]) {
     printf("Name: %s\n", test_name);
     printf("Size: %d\n", test_size);
     printf("Sampling Rate: %d\n", test_sampling_rate);
+    printf("============================================\n");
 
-    const struct Rectangle test_rects[11] = {
-        {1, 0, 0, 3, 7},
-        {2, 1, 8, 2, 3},
-        {3, 3, 0, 1, 1},
-        {4, 3, 1, 7, 1},
-        {5, 3, 6, 2, 3},
-        {6, 5, 6, 1, 1},
-        {7, 5, 8, 1, 2},
-        {8, 6, 9, 2, 2},
-        {9, 10, 1, 1, 2},
-        {10, 11, 2, 1, 2},
-        {11, 12, 3, 1, 2}
-    };
+    std::vector<Rectangle> rects;
+    rects.push_back(Rectangle(1, 0, 0, 5, 5));
+    rects.push_back(Rectangle(2, 5, 5, 5, 5));
+    rects.push_back(Rectangle(3, 10, 10, 5, 5));
 
-    const struct Adjacencies test_adj = {
-        &test_rects[0],
-        {&test_rects[1], &test_rects[2]}
-    };
-
-    print_adj(&test_adj);
+    for (auto rect: rects) {
+        printf("%s\n", rect.to_string_point().c_str());
+    }
 
     fclose(test_csv);
 }
