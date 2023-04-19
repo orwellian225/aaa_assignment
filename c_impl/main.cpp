@@ -37,8 +37,13 @@ int main(int argc, char* argv[]) {
     printf("============================================\n");
 
     std::vector<Rectangle> rects = generate::appending(test_size);
-    for (auto rect: rects) {
-        printf("%s\n", rect.to_string_point().c_str());
+    // for (auto rect: rects) {
+    //     printf("%s\n", rect.to_string_point().c_str());
+    // }
+
+    std::vector<Adjacency> bf_result = alg::brute_force(rects);
+    for(auto adj: bf_result) {
+        printf("%s\n", adj.to_string().c_str());
     }
 
     fclose(test_csv);

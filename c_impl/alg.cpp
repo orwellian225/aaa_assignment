@@ -2,6 +2,7 @@
 #include <time.h>
 #include <vector>
 #include <random>
+#include <iostream>
 
 #include "rectangle.h"
 #include "adjacency.h"
@@ -39,7 +40,7 @@ namespace generate {
         // Start at 1 as first rectangle has already been made
         size_t i = 1;
         while (i < size) {
-            // printf("\rGenerating rectangle %ld / %ld", i + 1, size);
+            printf("\rGenerating rectangle %ld / %ld", i + 1, size);
             size_t rect_id = i;
 
             std::uniform_int_distribution<size_t> spawn_rect_dist(0, rects.size() - 1);
@@ -56,5 +57,30 @@ namespace generate {
 
         printf("\n");
         return rects;
+    }
+}
+
+namespace alg {
+    std::vector<Adjacency> brute_force(std::vector<Rectangle>& rects) {
+
+        std::vector<Adjacency> results;
+
+        for (auto r1: rects) {
+            Adjacency current_adj(&r1);
+            for (auto r2: rects) {
+                if (r1 == r2) { continue; }
+                if (r1.is_adjacent(r2)) { 
+
+                    Rectangle* test = &r1;
+
+                    printf("%d : %s\n", r1.rect_id(), r2.to_string_point().c_str());
+                    current_adj.add_adj(&r2);
+                }
+            }
+
+            results.push_back(current_adj);
+        }
+
+        return results;
     }
 }
