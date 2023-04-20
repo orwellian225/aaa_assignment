@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include <chrono>
 
 #include "rectangle.h"
 #include "adjacency.h"
@@ -36,14 +37,30 @@ int main(int argc, char* argv[]) {
     printf("Sampling Rate: %d\n", test_sampling_rate);
     printf("============================================\n");
 
-    std::vector<Rectangle> rects = generate::appending(test_size);
+    // std::vector<Rectangle> rects = generate::appending(test_size);
     // for (auto rect: rects) {
     //     printf("%s\n", rect.to_string_point().c_str());
     // }
 
-    std::vector<Adjacency> bf_result = alg::brute_force(rects);
-    for(auto adj: bf_result) {
-        printf("%s\n", adj.to_string().c_str());
+    // std::vector<Adjacency> bf_result = alg::brute_force(rects);
+    // for(auto adj: bf_result) {
+    //     printf("%s\n", adj.to_string().c_str());
+    // }
+
+    for (int i = 0; i < test_size; ++i) {
+
+        std::chrono::duration<double, std::milli> sum_time = std::chrono::seconds(0);
+        for (int j = 0; j < test_sampling_rate; ++j) {
+            std::vector<Rectangle> rects = generate::appending(i);
+
+            auto start_time = std::chrono::high_resolution_clock::now();
+            std::vector<Adjacency> result = alg::brute_force(rects);
+            auto end_time = std::chrono::high_resolution_clock::now();
+            sum_time += end_time - start_time;
+        }
+
+        std::chrono::duration<double, std::milli> average_time = sum_time / test_sampling_rate;
+        printf("%d average time %f\n", i, average_time.count());
     }
 
     fclose(test_csv);

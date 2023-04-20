@@ -40,7 +40,7 @@ namespace generate {
         // Start at 1 as first rectangle has already been made
         size_t i = 1;
         while (i < size) {
-            printf("\rGenerating rectangle %ld / %ld", i + 1, size);
+            // printf("\rGenerating rectangle %ld / %ld", i + 1, size);
             size_t rect_id = i;
 
             std::uniform_int_distribution<size_t> spawn_rect_dist(0, rects.size() - 1);
@@ -55,7 +55,7 @@ namespace generate {
             }
         }
 
-        printf("\n");
+        // printf("\n");
         return rects;
     }
 }
@@ -73,7 +73,7 @@ namespace alg {
 
                     Rectangle* test = &r1;
 
-                    printf("%d : %s\n", r1.rect_id(), r2.to_string_point().c_str());
+                    // printf("%d : %s\n", r1.rect_id(), r2.to_string_point().c_str());
                     current_adj.add_adj(&r2);
                 }
             }
