@@ -70,9 +70,7 @@ namespace alg {
             for (auto r2: rects) {
                 if (r1 == r2) { continue; }
                 if (r1.is_adjacent(r2)) { 
-
                     Rectangle* test = &r1;
-
                     // printf("%d : %s\n", r1.rect_id(), r2.to_string_point().c_str());
                     current_adj.add_adj(&r2);
                 }

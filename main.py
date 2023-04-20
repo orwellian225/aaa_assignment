@@ -7,9 +7,8 @@ import os
 from rectangle_mod import generate_rectangles, draw_rectangles
 
 def brute_algorithm(rectangles):
-    rectangles.sort()    
     for i in range(len(rectangles)):
-        for j in range(i + 1, len(rectangles)):
+        for j in range(len(rectangles)):
             if rectangles[i] == rectangles[j]:
                 rectangles[i].add_adj(rectangles[j])
 

@@ -60,8 +60,10 @@ int main(int argc, char* argv[]) {
         }
 
         std::chrono::duration<double, std::milli> average_time = sum_time / test_sampling_rate;
-        printf("%d average time %f\n", i, average_time.count());
+        fprintf(test_csv, "%d,%f\n", i, average_time.count());
+        printf("\rCurrent Size: %d", i);
     }
+    printf("\n");
 
     fclose(test_csv);
 }
