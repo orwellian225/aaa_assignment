@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
     printf("============================================\n");
 
     char filepath_test[1024];
-    snprintf(filepath_test, 1024, "%s/time_test_results.csv", test_dir);
+    snprintf(filepath_test, 1024, "%s/performance_test_results.csv", test_dir);
     FILE* test_csv = fopen(filepath_test, "w");
 
     for (int i = 0; i < test_size; ++i) {
@@ -134,7 +134,7 @@ int main(int argc, char* argv[]) {
     fclose(test_csv);
     
     char graph_command_buffer[1024];
-    snprintf(graph_command_buffer, 1024, "python3 graph_generator.py 1 %s.csv  %s/time_test_graph", test_name, test_name);
+    snprintf(graph_command_buffer, 1024, "python3 graph_generator.py 1 %s/performance_test_results.csv  %s/performance_test_graph", test_dir, test_dir);
     system(graph_command_buffer);
 
     return 0;
