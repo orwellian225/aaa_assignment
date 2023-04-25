@@ -106,7 +106,7 @@ int main(int argc, char* argv[]) {
 
         // Creating example data visualisation
         char data_vis_command[1024];
-        snprintf(data_vis_command, 1024, "python3 draw_data.py %s example_%d", test_dir, i);
+        snprintf(data_vis_command, 1024, "python3 util/draw_data.py %s example_%d", test_dir, i);
         system(data_vis_command);
     }
     printf("\n\n");
@@ -139,7 +139,7 @@ int main(int argc, char* argv[]) {
     fclose(test_csv);
     
     char graph_command_buffer[1024];
-    snprintf(graph_command_buffer, 1024, "python3 graph_generator.py 1 %s/performance_test_results.csv  %s/performance_test_graph", test_dir, test_dir);
+    snprintf(graph_command_buffer, 1024, "python3 util/graph_generator.py 1 %s/performance_test_results.csv  %s/performance_test_graph", test_dir, test_dir);
     system(graph_command_buffer);
 
     return 0;
