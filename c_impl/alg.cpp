@@ -65,14 +65,13 @@ namespace alg {
 
         std::vector<Adjacency> results;
 
-        for (auto r1: rects) {
-            Adjacency current_adj(&r1);
-            for (auto r2: rects) {
-                if (r1 == r2) { continue; }
-                if (r1.is_adjacent(r2)) { 
-                    Rectangle* test = &r1;
-                    // printf("%d : %s\n", r1.rect_id(), r2.to_string_point().c_str());
-                    current_adj.add_adj(&r2);
+        for (int i = 0; i < rects.size(); ++i) {
+            Adjacency current_adj(&rects[i]);
+            for (int j = 0; j < rects.size(); ++j) {
+                if ( rects[i] == rects[j]) { continue; }
+                if (rects[i].is_adjacent(rects[j])) { 
+                    Rectangle* test = &rects[i];
+                    current_adj.add_adj(&rects[j]);
                 }
             }
 

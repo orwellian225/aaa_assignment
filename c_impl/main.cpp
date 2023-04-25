@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
     }
 
     char filename_buffer[260];
-    sprintf(filename_buffer, "%s.csv", test_name);
+    snprintf(filename_buffer, 260, "%s.csv", test_name);
     FILE* test_csv = fopen(filename_buffer, "w");
 
     printf("Test Details\n============================================\n");
@@ -37,15 +37,15 @@ int main(int argc, char* argv[]) {
     printf("Sampling Rate: %d\n", test_sampling_rate);
     printf("============================================\n");
 
-    // std::vector<Rectangle> rects = generate::appending(test_size);
-    // for (auto rect: rects) {
-    //     printf("%s\n", rect.to_string_point().c_str());
-    // }
+    std::vector<Rectangle> rects = generate::appending(test_size);
+    for (auto rect: rects) {
+        printf("%s\n", rect.to_string_point().c_str());
+    }
 
-    // std::vector<Adjacency> bf_result = alg::brute_force(rects);
-    // for(auto adj: bf_result) {
-    //     printf("%s\n", adj.to_string().c_str());
-    // }
+    std::vector<Adjacency> bf_result = alg::brute_force(rects);
+    for(auto adj: bf_result) {
+        printf("%s\n", adj.to_string().c_str());
+    }
 
     for (int i = 0; i < test_size; ++i) {
 
