@@ -21,6 +21,8 @@ std::string Sprintf(const char *fmt, Args... args)
 void make_dir(const char* name) {
     #ifdef __linux__
         mkdir(name, 777);
+    #elif __APPLE__
+        mkdir(name, 777);
     #else
         _mkdir(name);
     #endif
@@ -60,7 +62,9 @@ int main(int argc, char* argv[]) {
     char test_dir[128];
     snprintf(test_dir, 128, "%s", test_name);
     if (!check_dir(test_dir)) {
-        make_dir(test_dir);
+        char command[256];
+        snprintf(command, 256, "mkdir %s", test_dir);
+        system(command);
     }
 
 
@@ -80,8 +84,8 @@ int main(int argc, char* argv[]) {
         char filepath_example_data[1024];
         char filepath_example_result[1024];
 
-        snprintf(filepath_example_data, 1024, "%s/example_%d_data.csv", test_dir, i);
-        snprintf(filepath_example_result, 1024, "%s/example_%d_result.csv", test_dir, i);
+        snprintf(filepath_example_data, 1024, "./%s/example_%d_data.csv", test_dir, i);
+        snprintf(filepath_example_result, 1024, "./%s/example_%d_result.csv", test_dir, i);
 
         FILE* example_data = fopen(filepath_example_data, "w");
         FILE* example_result = fopen(filepath_example_result, "w");
