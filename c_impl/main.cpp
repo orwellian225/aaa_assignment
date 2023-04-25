@@ -103,6 +103,11 @@ int main(int argc, char* argv[]) {
 
         fclose(example_data);
         fclose(example_result);
+
+        // Creating example data visualisation
+        char data_vis_command[1024];
+        snprintf(data_vis_command, 1024, "python3 draw_data.py %s example_%d", test_dir, i);
+        system(data_vis_command);
     }
     printf("\n\n");
 
