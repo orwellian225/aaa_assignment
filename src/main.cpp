@@ -3,6 +3,7 @@
 #include <vector>
 #include <chrono>
 #include <sys/stat.h>
+#include <math.h>
 
 #include "rectangle.h"
 #include "adjacency.h"
@@ -78,8 +79,9 @@ int main(int argc, char* argv[]) {
 
     printf("Generating %d examples\n", example_count);
     printf("============================================\n");
-    for (int i = 0; i < example_count; ++i) {
-        printf("\rCurrent example: %d", i + 1);
+    for (int i = 1; i < 1 + example_count; ++i) {
+        printf("\rCurrent example: %d / %d - size: %d", i, example_count, (int) floor(pow(10.0, i))); 
+        fflush(stdout);
 
         char filepath_example_data[1024];
         char filepath_example_result[1024];
@@ -90,7 +92,7 @@ int main(int argc, char* argv[]) {
         FILE* example_data = fopen(filepath_example_data, "w");
         FILE* example_result = fopen(filepath_example_result, "w");
 
-        std::vector<Rectangle> rects = generate::appending(10);
+        std::vector<Rectangle> rects = generate::appending((int) floor(pow(10.0, i)));
         std::vector<Adjacency> bf_result = alg::brute_force(rects);
 
         for (auto rect: rects) {
@@ -111,7 +113,7 @@ int main(int argc, char* argv[]) {
     }
     printf("\n\n");
 
-    printf("Executing Test from 1 to %d\n", test_size);
+    printf("Executing Performance Test");
     printf("============================================\n");
 
     char filepath_test[1024];
@@ -119,7 +121,8 @@ int main(int argc, char* argv[]) {
     FILE* test_csv = fopen(filepath_test, "w");
 
     for (int i = 0; i < test_size; ++i) {
-        printf("\rCurrent test: %d", i + 1);
+        printf("\rCurrent test: %d / %d", i + 1, test_size);
+        fflush(stdout);
 
         std::chrono::duration<double, std::milli> sum_time = std::chrono::seconds(0);
         for (int j = 0; j < test_sampling_rate; ++j) {
