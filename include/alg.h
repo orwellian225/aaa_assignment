@@ -12,5 +12,5 @@ namespace generate {
 
 namespace alg {
     std::vector<Adjacency> brute_force(std::vector<Rectangle>& rects);
-    std::vector<Adjacency> optimised(std::vector<Rectangle>& rects);
+    std::vector<Adjacency> optimised(const std::vector<Rectangle>& rects);
 }

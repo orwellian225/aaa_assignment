@@ -3,6 +3,8 @@
 #include <vector>
 #include <random>
 #include <iostream>
+#include <set>
+#include <algorithm>
 
 #include "rectangle.h"
 #include "adjacency.h"
@@ -76,6 +78,60 @@ namespace alg {
             }
 
             results.push_back(current_adj);
+        }
+
+        return results;
+    }
+
+    struct ep_t { // Event point struct
+        char type; // 0 = Left x, 1 = Right x
+        Rectangle& rect;
+    };
+    auto rect_cand_compare = [](Rectangle* lhs, Rectangle* rhs) {
+        return lhs->bot_y() < rhs->bot_y();
+    };
+
+    std::vector<Adjacency> optimised(std::vector<Rectangle>& rects) {
+
+        std::vector<ep_t> event_points;
+        for (size_t i = 0; i < rects.size(); ++i) {
+            event_points.push_back(ep_t {
+                0,
+                rects[i]
+            });
+
+            event_points.push_back(ep_t {
+                1,
+                rects[i]
+            });
+        }
+
+        std::sort(event_points.begin(), event_points.end(), [](ep_t a, ep_t b) {
+            return a.rect.left_x() < b.rect.left_x() || a.type < b.type || a.rect.bot_y() < b.rect.bot_y();
+        });
+
+        std::vector<Adjacency> results;
+
+        std::set<Rectangle*, decltype(rect_cand_compare)> candidates;
+        for (auto ep: event_points) {
+
+            if (ep.type == 0) { // If left x val of rect
+                candidates.insert(&ep.rect);
+            } else {
+                candidates.erase(&ep.rect);
+                Adjacency current_adj(&(ep.rect));
+                auto first_el = candidates.lower_bound(&ep.rect);
+
+                for (auto el = first_el; el != candidates.end(); ++el) {
+                    Rectangle* rect = *el;
+                    if (ep.rect.is_adjacent(*rect)) {
+                        current_adj.add_adj(rect);
+                    }
+                }
+
+                results.push_back(current_adj);
+            }
+
         }
 
         return results;
