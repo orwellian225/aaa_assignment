@@ -1,5 +1,28 @@
 # Advanced Analysis of Algorithms Assignment
 
+## Executing Code
+
+### Requirements
+
+* GCC Compiler
+* c++ 11 standard library
+
+### Compiling 
+
+```
+g++ --std=c++11 -g src/*.cpp -Iinclude -o main.o
+```
+
+### Running
+```
+./main.o <TEST_NAME> <TEST_SIZE> <TEST_SAMPLING> <TEST_EXAMPLES>
+```
+
+* <TEST_NAME> - The name of the test
+* <TEST_SIZE> - The max size to run the performance tests up to
+* <TEST_SAMPLING> - The number of times to execute a performance test and calculate and average from
+* <TEST_EXAMPLES> - The number of examples to generate, each subsequent example is an order of magnitude greater in size
+
 ## Data
 
 A set of rectangles in a 2D environment.
@@ -20,7 +43,6 @@ A set of rectangles in a 2D environment.
 
 ### Brute force / Naive
 
-1. Sort the list of rectangles ordering by the rectangles left x value, increasing 
 2. Iterate through each rectangle as rect1
-3. Iterate through each rectangle that occurs after rect1 as rect2
+3. Iterate through each other rectangle as rect2
 4. if rect2 is adjacent to rect1's right side, then add rect2 to rect1's adjacencies

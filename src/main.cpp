@@ -140,6 +140,30 @@ int main(int argc, char* argv[]) {
     printf("\n\n");
 
     fclose(test_csv);
+
+    char filepath_test_opt[1024];
+    snprintf(filepath_test_opt, 1024, "%s/performance_test_results_opt.csv", test_dir);
+    test_csv = fopen(filepath_test_opt, "w");
+
+    for (int i = 0; i < test_size; ++i) {
+        printf("\rCurrent test: %d", i + 1);
+
+        std::chrono::duration<double, std::milli> sum_time = std::chrono::seconds(0);
+        for (int j = 0; j < test_sampling_rate; ++j) {
+            std::vector<Rectangle> rects = generate::appending(i);
+
+            auto start_time = std::chrono::high_resolution_clock::now();
+            std::vector<Adjacency> result = alg::brute_force(rects);
+            auto end_time = std::chrono::high_resolution_clock::now();
+            sum_time += end_time - start_time;
+        }
+
+        std::chrono::duration<double, std::milli> average_time = sum_time / test_sampling_rate;
+        fprintf(test_csv, "%d,%f\n", i, average_time.count());
+    }
+    printf("\n\n");
+
+    fclose(test_csv);
     
     char graph_command_buffer[1024];
     snprintf(graph_command_buffer, 1024, "python3 util/graph_generator.py 1 %s/performance_test_results.csv  %s/performance_test_graph", test_dir, test_dir);
